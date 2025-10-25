@@ -1,5 +1,5 @@
 export default function Home() {
-  return <div>
-    Test
+  // navbar with different script names
+  return <div className="font-victor-mono">
   </div>;
 }
