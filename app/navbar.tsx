@@ -2,10 +2,8 @@
 
 const Navbar = () => {
   return (
-    <nav className="flex justify-center">
-      <ul className="flex flex-row">
-        <li>Batch Sharp</li>
-        <li>Set Filetype</li>
+    <nav className="">
+      <ul className="flex flex-row bg-blue-300 size-fit mx-auto">
       </ul>
     </nav>
   );
