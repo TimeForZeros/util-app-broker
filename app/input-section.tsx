@@ -1,4 +1,3 @@
-
 import {
   Card,
   CardContent,
@@ -7,8 +6,17 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
+import {
+  CheckboxComponent,
+  NumberComponent,
+  RangeComponent,
+  SelectComponent,
+  TextComponent,
+} from './inputs';
+import { Button } from '@/components/ui/button';
 
 type ImageType = 'jpg' | 'jpeg' | 'avif' | 'png' | 'webp';
+
 type BatchSharpInput = {
   source: string;
   destination: string;
@@ -18,16 +26,6 @@ type BatchSharpInput = {
   sizeLock?: number;
   effort?: number;
 };
-
-// const batchSharpFixture: BatchSharpInput = {
-//   source: 'foo',
-//   destination: 'bar',
-//   format: 'avif',
-//   auto: false,
-//   quality: 80,
-//   sizeLock: 1200,
-//   effort: 4,
-// };
 
 type Input = {
   label?: string;
@@ -125,10 +123,7 @@ const extractStateFromTemplate = (template: InputTemplate): TemplateState => {
   return templateState;
 };
 
-
-
-
-const InputForm = ({ inputData }: { inputData: TemplateState }) => {
+const InputSection = ({ inputData }: { inputData: TemplateState }) => {
   return (
     <Card>
       <CardHeader>
@@ -136,11 +131,7 @@ const InputForm = ({ inputData }: { inputData: TemplateState }) => {
         <CardDescription>Convert and Resize Images</CardDescription>
       </CardHeader>
       <CardContent className="grid gap-6">
-        <CheckboxComponent
-          name="auto"
-          value={inputData.advancedSettings.auto}
-          componentType="advanced"
-        />
+        
       </CardContent>
       <CardFooter>
         <Button>Submit</Button>
@@ -149,5 +140,4 @@ const InputForm = ({ inputData }: { inputData: TemplateState }) => {
   );
 };
 
-
-export default InputForm;
+export default InputSection;

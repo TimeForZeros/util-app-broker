@@ -9,7 +9,51 @@ import {
   CardTitle,
 } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import InputForm from './input-component';
+import InputForm from './input-section';
+import { inputGenerator } from './inputs';
+import InputSection from './input-section';
+
+const batchSharpTemplate: InputTemplate = {
+  title: 'Batch Sharp',
+  id: '62420',
+  basicSettings: {
+    source: {
+      type: 'file',
+    },
+    destination: {
+      type: 'file',
+    },
+    format: {
+      type: 'select',
+      options: ['jpg', 'jpeg', 'png', 'avif', 'webp'],
+      default: 'avif',
+    },
+  },
+  advancedSettings: {
+    auto: {
+      type: 'checkbox',
+      default: false,
+    },
+    quality: {
+      type: 'range',
+      min: 0,
+      max: 100,
+      default: 80,
+      step: 5,
+    },
+    sizeLock: {
+      type: 'number',
+      default: 1200,
+    },
+    effort: {
+      type: 'range',
+      default: 0,
+      min: 0,
+      max: 10,
+      step: 1,
+    },
+  },
+};
 
 const ContainerContent = () => {
   return (
@@ -20,7 +64,7 @@ const ContainerContent = () => {
           <TabsTrigger value="Set Filetype">Set Filetype</TabsTrigger>
         </TabsList>
         <TabsContent value="Batch Sharp">
-          <InputForm />
+          <InputSection />
         </TabsContent>
         <TabsContent value="Set Filetype">
           <Card>
