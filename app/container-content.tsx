@@ -18,10 +18,10 @@ const batchSharpTemplate: InputTemplate = {
   id: '62420',
   basicSettings: {
     source: {
-      type: 'file',
+      type: 'text',
     },
     destination: {
-      type: 'file',
+      type: 'text',
     },
     format: {
       type: 'select',
@@ -64,7 +64,7 @@ const ContainerContent = () => {
           <TabsTrigger value="Set Filetype">Set Filetype</TabsTrigger>
         </TabsList>
         <TabsContent value="Batch Sharp">
-          <InputSection />
+          <InputSection inputData={batchSharpTemplate} />
         </TabsContent>
         <TabsContent value="Set Filetype">
           <Card>

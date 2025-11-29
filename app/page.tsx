@@ -1,4 +1,4 @@
-import ContainerContent from "./container-contet";
+import ContainerContent from "./container-content";
 
 export default function Home() {
   // navbar with different script names

@@ -11,7 +11,6 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { Slider } from '@/components/ui/slider';
-import { useState } from 'react';
 
 type InputProps = {
   name: string;
@@ -95,7 +94,7 @@ type CheckboxProps = InputProps & {
   value?: boolean;
 };
 export const CheckboxComponent = ({ name, value, componentType }: CheckboxProps) => {
-  console.log(name)
+  console.log(name);
   // const handleChange = (e) => console.log(e.target.checked)
   // };
   return (
@@ -108,10 +107,15 @@ export const CheckboxComponent = ({ name, value, componentType }: CheckboxProps)
 
 export const inputGenerator = (inputData, componentType) => {
   switch (inputData.type as Input['type']) {
+    case 'text':
+      return <TextComponent key={inputData.name} {...inputData} componentType={componentType} />;
     case 'checkbox':
-      console.log('hit');
-      return <CheckboxComponent { ...inputData} componentType={componentType} />;
-    // case 'number':
-    //   return <NumberComponent name={inputData.name} min={inputData.min} />;
+      return (
+        <CheckboxComponent key={inputData.name} {...inputData} componentType={componentType} />
+      );
+    case 'number':
+      return <NumberComponent key={inputData.name} {...inputData} componentType={componentType} />;
+    case 'range':
+      return <RangeComponent key={inputData.name} {...inputData} componentType={componentType} />;
   }
 };

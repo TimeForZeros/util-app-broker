@@ -8,6 +8,7 @@ import {
 } from '@/components/ui/card';
 import {
   CheckboxComponent,
+  inputGenerator,
   NumberComponent,
   RangeComponent,
   SelectComponent,
@@ -49,11 +50,13 @@ type CheckInput = Input & {
   default: boolean;
 };
 
+type InputType = NumberInput | SelectInput | RangeInput | CheckInput;
+
 type InputTemplate = {
   title: string;
   id: string;
-  basicSettings: Record<string, NumberInput | SelectInput | RangeInput | CheckInput>;
-  advancedSettings?: Record<string, NumberInput | SelectInput | RangeInput | CheckInput>;
+  basicSettings: Record<string, InputType>;
+  advancedSettings?: Record<string, InputType>;
 };
 
 const batchSharpTemplate: InputTemplate = {
@@ -101,29 +104,31 @@ const batchSharpTemplate: InputTemplate = {
 type TemplateState = {
   id: string;
   title: string;
-  basicSettings: Record<string, string | number | boolean>;
-  advancedSettings?: Record<string, string | number | boolean>;
+  basicSettings: Record<string, InputType>;
+  advancedSettings?: Record<string, InputType>;
 };
 
-const extractStateFromTemplate = (template: InputTemplate): TemplateState => {
-  const templateState: TemplateState = {
-    id: template.id,
-    title: template.title,
-    basicSettings: {},
-  };
-  Object.entries(template.basicSettings).forEach(([key, value]) => {
-    templateState.basicSettings[key] = value.default ?? '';
-  });
-  if (template.advancedSettings) {
-    templateState.advancedSettings = {};
-    Object.entries(template.advancedSettings).forEach(([key, value]) => {
-      templateState.advancedSettings![key] = value.default ?? '';
-    });
-  }
-  return templateState;
-};
+// const extractStateFromTemplate = (template: InputTemplate): TemplateState => {
+//   const templateState: TemplateState = {
+//     id: template.id,
+//     title: template.title,
+//     basicSettings: {},
+//   };
+//   Object.entries(template.basicSettings).forEach(([key, value]) => {
+//     templateState.basicSettings[key] = value.default ?? '';
+//   });
+//   if (template.advancedSettings) {
+//     templateState.advancedSettings = {};
+//     Object.entries(template.advancedSettings).forEach(([key, value]) => {
+//       templateState.advancedSettings![key] = value.default ?? '';
+//     });
+//   }
+//   return templateState;
+// };
 
 const InputSection = ({ inputData }: { inputData: TemplateState }) => {
+  const basicSettingDetails = Object.entries(inputData.basicSettings);
+  const advancedSettings = Object.entries(inputData?.advancedSettings);
   return (
     <Card>
       <CardHeader>
@@ -131,7 +136,13 @@ const InputSection = ({ inputData }: { inputData: TemplateState }) => {
         <CardDescription>Convert and Resize Images</CardDescription>
       </CardHeader>
       <CardContent className="grid gap-6">
-        
+        {basicSettingDetails.map(([key, value]) =>
+          inputGenerator({ ...value, name: key }, 'basic'),
+        )}
+        {advancedSettings.length > 0 &&
+          advancedSettings.map(([key, value]) =>
+            inputGenerator({ ...value, name: key }, 'advanced'),
+          )}
       </CardContent>
       <CardFooter>
         <Button>Submit</Button>
