@@ -104,14 +104,13 @@ type TemplateState = {
 
 type OutputSettings = Record<string, string | number | boolean>;
 const setSettingsDefaults = (settingData?: Record<string, InputType>) => {
-  console.log('hits');
   const outputSettings: OutputSettings = {};
   if (!settingData) return outputSettings;
   Object.entries(settingData).forEach(([key, value]) => {
-    console.log(value);
     if (value.defaultValue === undefined) return;
     outputSettings[key] = value.defaultValue;
   });
+  console.log(outputSettings);
   return outputSettings;
 };
 
@@ -120,6 +119,8 @@ const InputSection = ({ inputData }: { inputData: TemplateState }) => {
     basicSettings: setSettingsDefaults(inputData.basicSettings),
     advancedSettings: setSettingsDefaults(inputData?.advancedSettings),
   });
+  const [isDisabled, setIsDisabled] = useState(true);
+
   const basicSettings = Object.entries(inputData.basicSettings);
   const advancedSettings = inputData.advancedSettings
     ? Object.entries(inputData.advancedSettings)
@@ -127,9 +128,14 @@ const InputSection = ({ inputData }: { inputData: TemplateState }) => {
   const handleBasicUpdate = (key: string, value: number | boolean | string) => {
     const { basicSettings } = { ...outputSettings };
     basicSettings[key] = value;
-    console.log(basicSettings);
     setOutputSettings({ ...outputSettings, basicSettings });
   };
+  const handleAdvancedUpdate = (key: string, value: number | boolean | string) => {
+    const { advancedSettings } = { ...outputSettings };
+    advancedSettings[key] = value;
+    setOutputSettings({ ...outputSettings, advancedSettings });
+  };
+
   return (
     <Card>
       <CardHeader>
@@ -142,11 +148,11 @@ const InputSection = ({ inputData }: { inputData: TemplateState }) => {
         )}
         {advancedSettings.length > 0 &&
           advancedSettings.map(([key, value]) =>
-            inputGenerator({ ...value, name: key, handleUpdate: handleBasicUpdate }),
+            inputGenerator({ ...value, name: key, handleUpdate: handleAdvancedUpdate }),
           )}
       </CardContent>
       <CardFooter>
-        <Button>Submit</Button>
+        <Button >Submit</Button>
       </CardFooter>
     </Card>
   );

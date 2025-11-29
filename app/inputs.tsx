@@ -46,7 +46,6 @@ type NumberProps = InputProps & {
 };
 
 export const NumberComponent = ({ name, min, max, defaultValue, handleUpdate }: NumberProps) => {
-  console.log(name);
   return (
     <div>
       <Label htmlFor={name}>{name}</Label>
@@ -97,7 +96,6 @@ type SelectProps = InputProps & {
 };
 
 export const SelectComponent = ({ name, options, defaultValue, handleUpdate }: SelectProps) => {
-  console.log(name);
   return (
     <Select defaultValue={defaultValue} onValueChange={(value) => handleUpdate(name, value)}>
       <SelectTrigger>
@@ -121,7 +119,6 @@ type CheckboxProps = InputProps & {
   defaultValue?: boolean;
 };
 export const CheckboxComponent = ({ name, defaultValue, handleUpdate }: CheckboxProps) => {
-  console.log(name);
   return (
     <div className="flex items-center gap-3">
       <Checkbox id={name} defaultChecked={defaultValue} onCheckedChange={(checked) => handleUpdate(name, checked)} />
