@@ -6,15 +6,9 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
-import {
-  CheckboxComponent,
-  inputGenerator,
-  NumberComponent,
-  RangeComponent,
-  SelectComponent,
-  TextComponent,
-} from './inputs';
+import { inputGenerator } from './inputs';
 import { Button } from '@/components/ui/button';
+import { useState } from 'react';
 
 type ImageType = 'jpg' | 'jpeg' | 'avif' | 'png' | 'webp';
 
@@ -108,27 +102,17 @@ type TemplateState = {
   advancedSettings?: Record<string, InputType>;
 };
 
-// const extractStateFromTemplate = (template: InputTemplate): TemplateState => {
-//   const templateState: TemplateState = {
-//     id: template.id,
-//     title: template.title,
-//     basicSettings: {},
-//   };
-//   Object.entries(template.basicSettings).forEach(([key, value]) => {
-//     templateState.basicSettings[key] = value.default ?? '';
-//   });
-//   if (template.advancedSettings) {
-//     templateState.advancedSettings = {};
-//     Object.entries(template.advancedSettings).forEach(([key, value]) => {
-//       templateState.advancedSettings![key] = value.default ?? '';
-//     });
-//   }
-//   return templateState;
-// };
-
 const InputSection = ({ inputData }: { inputData: TemplateState }) => {
-  const basicSettingDetails = Object.entries(inputData.basicSettings);
-  const advancedSettings = Object.entries(inputData?.advancedSettings);
+  const [outputSettings, setOutputSettings] = useState({ basicSettings: {}, advancedSettings: {} });
+  const basicSettings = Object.entries(inputData.basicSettings);
+  const advancedSettings = inputData.advancedSettings
+    ? Object.entries(inputData.advancedSettings)
+    : [];
+  const handleBasicUpdate = (key: string, value: number | boolean | string) => {
+    const { basicSettings } = { ...outputSettings };
+    basicSettings[key] = value;
+    setOutputSettings({ ...outputSettings, basicSettings });
+  };
   return (
     <Card>
       <CardHeader>
@@ -136,12 +120,12 @@ const InputSection = ({ inputData }: { inputData: TemplateState }) => {
         <CardDescription>Convert and Resize Images</CardDescription>
       </CardHeader>
       <CardContent className="grid gap-6">
-        {basicSettingDetails.map(([key, value]) =>
-          inputGenerator({ ...value, name: key }, 'basic'),
+        {basicSettings.map(([key, value]) =>
+          inputGenerator({ ...value, name: key, handleUpdate: handleBasicUpdate }),
         )}
         {advancedSettings.length > 0 &&
           advancedSettings.map(([key, value]) =>
-            inputGenerator({ ...value, name: key }, 'advanced'),
+            inputGenerator({ ...value, name: key, handleUpdate: handleBasicUpdate }),
           )}
       </CardContent>
       <CardFooter>

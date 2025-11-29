@@ -14,7 +14,7 @@ import { Slider } from '@/components/ui/slider';
 
 type InputProps = {
   name: string;
-  componentType: 'basic' | 'advanced';
+  handleUpdate: (key: string, data: string | number | boolean) => void;
 };
 
 type Input = {
@@ -23,14 +23,19 @@ type Input = {
 };
 
 type TextProps = InputProps & {
-  value?: string;
+  defaultValue?: string;
 };
-
-export const TextComponent = ({ name, componentType, value }: TextProps) => {
+export const TextComponent = ({ name, defaultValue, handleUpdate }: TextProps) => {
+  console.log(name);
   return (
     <div>
       <Label htmlFor={name}>{name}</Label>
-      <Input type="text" id={name} value={value} />
+      <Input
+        type="text"
+        id={name}
+        defaultValue={defaultValue}
+        onChange={(e) => handleUpdate(name, e.target.value)}
+      />
     </div>
   );
 };
@@ -38,14 +43,22 @@ export const TextComponent = ({ name, componentType, value }: TextProps) => {
 type NumberProps = InputProps & {
   min?: number;
   max?: number;
-  value?: number;
+  defaultValue?: number;
 };
 
-export const NumberComponent = ({ name, componentType, min, max, value }) => {
+export const NumberComponent = ({ name, min, max, defaultValue, handleUpdate }: NumberProps) => {
+  console.log(name);
   return (
     <div>
       <Label htmlFor={name}>{name}</Label>
-      <Input id={name} type="number" min={min} max={max} value={value} />
+      <Input
+        id={name}
+        type="number"
+        min={min}
+        max={max}
+        defaultValue={defaultValue}
+        onChange={(e) => handleUpdate(name, parseInt(e.target.value))}
+      />
     </div>
   );
 };
@@ -54,25 +67,40 @@ type RangeProps = NumberProps & {
   step: number;
 };
 
-export const RangeComponent = ({ name, componentType, max, min, value, step }: RangeProps) => {
+export const RangeComponent = ({
+  name,
+  max,
+  min,
+  defaultValue = 0,
+  step,
+  handleUpdate,
+}: RangeProps) => {
   return (
     <div>
       <Label htmlFor={name}>
-        {name}: {value}
+        {name}: {defaultValue}
       </Label>
-      <Slider id={name} value={[value]} max={max} min={min} step={step} />
+      <Slider
+        id={name}
+        defaultValue={[defaultValue]}
+        max={max}
+        min={min}
+        step={step}
+        onValueChange={(value) => handleUpdate(name, value[0])}
+      />
     </div>
   );
 };
 
 type SelectProps = InputProps & {
   options: string[];
-  value?: string;
+  defaultValue?: string;
 };
 
-export const SelectComponent = ({ name, componentType, options, value }: SelectProps) => {
+export const SelectComponent = ({ name, options, defaultValue, handleUpdate }: SelectProps) => {
+  console.log(name);
   return (
-    <Select defaultValue={value}>
+    <Select defaultValue={defaultValue} onValueChange={(value) => handleUpdate(name, value)}>
       <SelectTrigger>
         <SelectValue />
       </SelectTrigger>
@@ -91,31 +119,27 @@ export const SelectComponent = ({ name, componentType, options, value }: SelectP
 };
 
 type CheckboxProps = InputProps & {
-  value?: boolean;
+  defaultValue?: boolean;
 };
-export const CheckboxComponent = ({ name, value, componentType }: CheckboxProps) => {
+export const CheckboxComponent = ({ name, defaultValue, handleUpdate }: CheckboxProps) => {
   console.log(name);
-  // const handleChange = (e) => console.log(e.target.checked)
-  // };
   return (
     <div className="flex items-center gap-3">
-      <Checkbox id={name} checked={value} />
+      <Checkbox id={name} defaultChecked={defaultValue} onCheckedChange={(checked) => handleUpdate(name, checked)} />
       <Label htmlFor={name}>{name}</Label>
     </div>
   );
 };
 
-export const inputGenerator = (inputData, componentType) => {
+export const inputGenerator = (inputData) => {
   switch (inputData.type as Input['type']) {
     case 'text':
-      return <TextComponent key={inputData.name} {...inputData} componentType={componentType} />;
+      return <TextComponent key={inputData.name} {...inputData} />;
     case 'checkbox':
-      return (
-        <CheckboxComponent key={inputData.name} {...inputData} componentType={componentType} />
-      );
+      return <CheckboxComponent key={inputData.name} {...inputData} />;
     case 'number':
-      return <NumberComponent key={inputData.name} {...inputData} componentType={componentType} />;
+      return <NumberComponent key={inputData.name} {...inputData} />;
     case 'range':
-      return <RangeComponent key={inputData.name} {...inputData} componentType={componentType} />;
+      return <RangeComponent key={inputData.name} {...inputData} />;
   }
 };
