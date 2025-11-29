@@ -26,7 +26,6 @@ type TextProps = InputProps & {
   defaultValue?: string;
 };
 export const TextComponent = ({ name, defaultValue, handleUpdate }: TextProps) => {
-  console.log(name);
   return (
     <div>
       <Label htmlFor={name}>{name}</Label>

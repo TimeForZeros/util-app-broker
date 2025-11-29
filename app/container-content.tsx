@@ -26,28 +26,28 @@ const batchSharpTemplate: InputTemplate = {
     format: {
       type: 'select',
       options: ['jpg', 'jpeg', 'png', 'avif', 'webp'],
-      default: 'avif',
+      defaultValue: 'avif',
     },
   },
   advancedSettings: {
     auto: {
       type: 'checkbox',
-      default: false,
+      defaultValue: false,
     },
     quality: {
       type: 'range',
       min: 0,
       max: 100,
-      default: 80,
+      defaultValue: 80,
       step: 5,
     },
     sizeLock: {
       type: 'number',
-      default: 1200,
+      defaultValue: 1200,
     },
     effort: {
       type: 'range',
-      default: 0,
+      defaultValue: 0,
       min: 0,
       max: 10,
       step: 1,

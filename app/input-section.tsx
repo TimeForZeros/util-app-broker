@@ -29,7 +29,7 @@ type Input = {
 type NumberInput = Input & {
   min?: number;
   max?: number;
-  default?: number;
+  defaultValue?: number;
 };
 type RangeInput = NumberInput & {
   step: number;
@@ -37,11 +37,11 @@ type RangeInput = NumberInput & {
 
 type SelectInput = Input & {
   options: string[];
-  default?: string;
+  defaultValue?: string;
 };
 
 type CheckInput = Input & {
-  default: boolean;
+  defaultValue: boolean;
 };
 
 type InputType = NumberInput | SelectInput | RangeInput | CheckInput;
@@ -66,28 +66,28 @@ const batchSharpTemplate: InputTemplate = {
     format: {
       type: 'select',
       options: ['jpg', 'jpeg', 'png', 'avif', 'webp'],
-      default: 'avif',
+      defaultValue: 'avif',
     },
   },
   advancedSettings: {
     auto: {
       type: 'checkbox',
-      default: false,
+      defaultValue: false,
     },
     quality: {
       type: 'range',
       min: 0,
       max: 100,
-      default: 80,
+      defaultValue: 80,
       step: 5,
     },
     sizeLock: {
       type: 'number',
-      default: 1200,
+      defaultValue: 1200,
     },
     effort: {
       type: 'range',
-      default: 0,
+      defaultValue: 0,
       min: 0,
       max: 10,
       step: 1,
@@ -102,8 +102,24 @@ type TemplateState = {
   advancedSettings?: Record<string, InputType>;
 };
 
+type OutputSettings = Record<string, string | number | boolean>;
+const setSettingsDefaults = (settingData?: Record<string, InputType>) => {
+  console.log('hits');
+  const outputSettings: OutputSettings = {};
+  if (!settingData) return outputSettings;
+  Object.entries(settingData).forEach(([key, value]) => {
+    console.log(value);
+    if (value.defaultValue === undefined) return;
+    outputSettings[key] = value.defaultValue;
+  });
+  return outputSettings;
+};
+
 const InputSection = ({ inputData }: { inputData: TemplateState }) => {
-  const [outputSettings, setOutputSettings] = useState({ basicSettings: {}, advancedSettings: {} });
+  const [outputSettings, setOutputSettings] = useState<Record<string, OutputSettings>>({
+    basicSettings: setSettingsDefaults(inputData.basicSettings),
+    advancedSettings: setSettingsDefaults(inputData?.advancedSettings),
+  });
   const basicSettings = Object.entries(inputData.basicSettings);
   const advancedSettings = inputData.advancedSettings
     ? Object.entries(inputData.advancedSettings)
@@ -111,6 +127,7 @@ const InputSection = ({ inputData }: { inputData: TemplateState }) => {
   const handleBasicUpdate = (key: string, value: number | boolean | string) => {
     const { basicSettings } = { ...outputSettings };
     basicSettings[key] = value;
+    console.log(basicSettings);
     setOutputSettings({ ...outputSettings, basicSettings });
   };
   return (
